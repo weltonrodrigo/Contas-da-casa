@@ -26,6 +26,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.parse.LogInCallback;
+import com.parse.Parse;
+import com.parse.ParseException;
+import com.parse.ParseUser;
+import com.parse.SignUpCallback;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -138,8 +144,28 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
-            mAuthTask.execute((Void) null);
+
+            ParseUser parseUser = new ParseUser();
+            parseUser.setEmail(email);
+            parseUser.setUsername(email);
+            parseUser.setPassword(password);
+
+//            parseUser.signUpInBackground(new SignUpCallback() {
+            parseUser.logInInBackground(email, password, new LogInCallback(){
+                @Override
+                public void done(ParseUser user, ParseException e) {
+                    if (user != null) {
+                        finish();
+                    } else {
+                        showProgress(false);
+                        mPasswordView.setError(getString(R.string.error_incorrect_password));
+                        mPasswordView.requestFocus();
+                    }
+                }
+            });
+
+//            mAuthTask = new UserLoginTask(email, password);
+//            mAuthTask.execute((Void) null);
         }
     }
 
