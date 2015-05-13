@@ -3,4 +3,8 @@
     <string name="title_despesa_list">Despesas</string>
     <string name="title_despesa_detail">Despesa Detail</string>
     <string name="action_add">Adicionar nova Despesa</string>
+    <string name="title_activity_nova_despesa">NovaDespesa</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
 </resources>

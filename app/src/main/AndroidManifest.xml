@@ -23,12 +23,20 @@
         </activity>
         <activity
             android:name=".DespesaListActivity"
-            android:label="@string/title_despesa_list"
-            android:exported="true">
+            android:exported="true"
+            android:label="@string/title_despesa_list" >
         </activity>
         <activity
             android:name=".DespesaDetailActivity"
             android:label="@string/title_despesa_detail"
+            android:parentActivityName=".DespesaListActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.familianascimento.rodrigo.contasdacasa.DespesaListActivity" />
+        </activity>
+        <activity
+            android:name=".NovaDespesa"
+            android:label="@string/title_activity_nova_despesa"
             android:parentActivityName=".DespesaListActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

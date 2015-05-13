@@ -1,0 +1,10 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:contasdacasa="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="org.familianascimento.rodrigo.contasdacasa.NovaDespesa">
+    <item android:id="@+id/action_add"
+        android:icon="@drawable/ic_action_accept"
+        android:title="@string/action_add"
+        contasdacasa:showAsAction="ifRoom"
+        />
+</menu>

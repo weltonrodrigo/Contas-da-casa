@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 
 
 /**
@@ -90,5 +91,23 @@ public class DespesaListActivity extends AppCompatActivity
         inflater.inflate(R.menu.despesa_list_activity_menu, menu);
 
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+
+        switch (item.getItemId()) {
+            case R.id.action_add:
+                newDespesa();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void newDespesa() {
+        Intent intent = new Intent(this, NovaDespesa.class);
+        startActivity(intent);
     }
 }
