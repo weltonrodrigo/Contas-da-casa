@@ -72,8 +72,9 @@ public class DespesaListFragment extends ListFragment {
         super.onCreate(savedInstanceState);
 
         ParseQueryAdapter parseQueryAdapter = new ParseQueryAdapter(
-                getActivity().getApplicationContext(),
-                "Despesa"
+                getActivity().getBaseContext(),
+                "Despesa",
+                android.R.layout.simple_list_item_2
         );
         parseQueryAdapter.setTextKey("nome");
 
