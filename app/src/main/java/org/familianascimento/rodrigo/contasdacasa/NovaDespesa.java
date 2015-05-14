@@ -1,6 +1,7 @@
 package org.familianascimento.rodrigo.contasdacasa;
 
 import android.app.DatePickerDialog;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -25,6 +26,7 @@ public class NovaDespesa extends AppCompatActivity implements
     private EditText mNomeField;
     private EditText mValorField;
     private EditText mVencimentoField;
+    private long mVencimentoMillis;
 
     private DatePickerDialog mDatePickerDialog;
 
@@ -62,8 +64,8 @@ public class NovaDespesa extends AppCompatActivity implements
 
         ParseObject parseObject = new ParseObject("Despesa");
         parseObject.put("nome", mNomeField.getText().toString());
-        parseObject.put("valor", mNomeField.getText().toString());
-        parseObject.put("vencimento", new Date( mNomeField.getText().toString() ) );
+        parseObject.put("valor", mValorField.getText().toString());
+        parseObject.put("vencimento", new Date( mVencimentoMillis ) );
 
         parseObject.saveInBackground();
     }
@@ -76,7 +78,7 @@ public class NovaDespesa extends AppCompatActivity implements
             Calendar mCalendar = Calendar.getInstance();
 
             mDatePickerDialog = new DatePickerDialog(
-                    getBaseContext(),
+                    this,
                     this,
                     mCalendar.get(Calendar.YEAR),
                     mCalendar.get(Calendar.MONTH),
@@ -99,6 +101,7 @@ public class NovaDespesa extends AppCompatActivity implements
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(myformat, Locale.US);
 
         mVencimentoField.setText(simpleDateFormat.format(mCalendar.getTime()));
+        mVencimentoMillis = mCalendar.getTimeInMillis();
 
     }
 
@@ -110,6 +113,7 @@ public class NovaDespesa extends AppCompatActivity implements
         switch (id) {
             case R.id.action_add:
                 saveNovaDespesa();
+                NavUtils.navigateUpFromSameTask(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
