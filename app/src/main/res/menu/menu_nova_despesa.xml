@@ -7,4 +7,11 @@
         android:title="@string/action_add"
         contasdacasa:showAsAction="ifRoom"
         />
+    <item android:id="@+id/action_new_progress"
+        android:title="Adicionando..."
+        android:visible="false"
+        android:orderInCategory="100"
+        contasdacasa:actionLayout="@layout/action_view_progress"
+        contasdacasa:showAsAction="ifRoom"
+        />
 </menu>

@@ -2,7 +2,7 @@ package org.familianascimento.rodrigo.contasdacasa;
 
 import android.app.DatePickerDialog;
 import android.support.v4.app.NavUtils;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v4.view.MenuItemCompat;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -11,8 +11,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 
+import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.SaveCallback;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -27,6 +30,8 @@ public class NovaDespesa extends AppCompatActivity implements
     private EditText mValorField;
     private EditText mVencimentoField;
     private long mVencimentoMillis;
+    private MenuItem mActionProgressMenuItem;
+    private MenuItem mAcceptMenuItem;
 
     private DatePickerDialog mDatePickerDialog;
 
@@ -50,7 +55,28 @@ public class NovaDespesa extends AppCompatActivity implements
         return true;
     }
 
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+
+        if(mActionProgressMenuItem == null) {
+            mActionProgressMenuItem = menu.findItem(R.id.action_new_progress);
+        }
+        if (mAcceptMenuItem == null) {
+            mAcceptMenuItem = menu.findItem(R.id.action_add);
+        }
+
+        //ProgressBar progressBar = (ProgressBar) MenuItemCompat.getActionView(mActionProgressMenuItem);
+
+        return super.onPrepareOptionsMenu(menu);
+    }
+
     public void saveNovaDespesa() {
+
+        mNomeField.setFocusable(false);
+        mValorField.setFocusable(false);
+        mVencimentoField.setFocusable(false);
+
+        showProgressBar();
 
         if(TextUtils.isEmpty(mNomeField.getText().toString())){
             mNomeField.setError("Não pode ser vazio");
@@ -67,7 +93,14 @@ public class NovaDespesa extends AppCompatActivity implements
         parseObject.put("valor", mValorField.getText().toString());
         parseObject.put("vencimento", new Date( mVencimentoMillis ) );
 
-        parseObject.saveInBackground();
+        parseObject.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null) {
+                    NavUtils.navigateUpFromSameTask(NovaDespesa.this);
+                }
+            }
+        });
     }
 
     @Override
@@ -113,11 +146,19 @@ public class NovaDespesa extends AppCompatActivity implements
         switch (id) {
             case R.id.action_add:
                 saveNovaDespesa();
-                NavUtils.navigateUpFromSameTask(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void showProgressBar(){
+        mAcceptMenuItem.setVisible(false);
+        mActionProgressMenuItem.setVisible(true);
+    }
+    private void hideProgressBar(){
+        mActionProgressMenuItem.setVisible(false);
+        mAcceptMenuItem.setVisible(true);
     }
 
     @Override
