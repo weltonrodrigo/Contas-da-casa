@@ -2,7 +2,6 @@ package org.familianascimento.rodrigo.contasdacasa;
 
 import android.app.DatePickerDialog;
 import android.support.v4.app.NavUtils;
-import android.support.v4.view.MenuItemCompat;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -11,10 +10,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 
+import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.SaveCallback;
 
 import java.text.SimpleDateFormat;
@@ -33,11 +33,14 @@ public class NovaDespesa extends AppCompatActivity implements
     private MenuItem mActionProgressMenuItem;
     private MenuItem mAcceptMenuItem;
 
+    private ParseObject mDespesa;
+
     private DatePickerDialog mDatePickerDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_nova_despesa);
 
         mNomeField = (EditText) findViewById(R.id.nomeEditText);
@@ -46,6 +49,38 @@ public class NovaDespesa extends AppCompatActivity implements
 
         mVencimentoField.setOnFocusChangeListener(this);
 
+        // Check if we must initialize na new one or editing.
+        if (savedInstanceState.containsKey("item_id")){
+
+            freezeFields();
+            showProgressBar();
+
+            ParseQuery parseQuery = new ParseQuery("Despesa");
+            parseQuery.getInBackground(savedInstanceState.getString("item_id"), new GetCallback() {
+                @Override
+                public void done(ParseObject parseObject, ParseException e) {
+                    if (e == null) {
+                        mDespesa = parseObject;
+                        hideProgressBar();
+                        setFields();
+                        unFreezeFields();
+                    }
+                }
+            });
+        }
+
+    }
+
+    private void setFields() {
+        mNomeField.setText( mDespesa.getString("nome") );
+        mValorField.setText( mDespesa.getString("valor") );
+        mVencimentoMillis = (mDespesa.getDate("vencimento")).getTime();
+
+
+        String myformat = "dd/MM/yy";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(myformat, Locale.US);
+
+        mVencimentoField.setText(simpleDateFormat.format(mVencimentoMillis));
     }
 
     @Override
@@ -72,9 +107,7 @@ public class NovaDespesa extends AppCompatActivity implements
 
     public void saveNovaDespesa() {
 
-        mNomeField.setFocusable(false);
-        mValorField.setFocusable(false);
-        mVencimentoField.setFocusable(false);
+        freezeFields();
 
         showProgressBar();
 
@@ -91,7 +124,7 @@ public class NovaDespesa extends AppCompatActivity implements
         ParseObject parseObject = new ParseObject("Despesa");
         parseObject.put("nome", mNomeField.getText().toString());
         parseObject.put("valor", mValorField.getText().toString());
-        parseObject.put("vencimento", new Date( mVencimentoMillis ) );
+        parseObject.put("vencimento", new Date(mVencimentoMillis));
 
         parseObject.saveInBackground(new SaveCallback() {
             @Override
@@ -101,6 +134,18 @@ public class NovaDespesa extends AppCompatActivity implements
                 }
             }
         });
+    }
+
+    private void freezeFields() {
+        mNomeField.setFocusable(false);
+        mValorField.setFocusable(false);
+        mVencimentoField.setFocusable(false);
+    }
+
+    private void unFreezeFields() {
+        mNomeField.setFocusable(true);
+        mValorField.setFocusable(true);
+        mVencimentoField.setFocusable(true);
     }
 
     @Override
