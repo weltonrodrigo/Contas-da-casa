@@ -82,8 +82,8 @@ public class MoradorFragment extends Fragment implements AbsListView.OnItemClick
 
         ArrayList<String> moradoresNomes = new ArrayList<>(moradorList.size());
 
-        for (int i = 0; i <= moradorList.size(); i++) {
-            moradoresNomes.add(moradorList.get(i).nome);
+        for (Morador m: moradorList){
+            moradoresNomes.add(m.nome);
         }
 
         // TODO: Change Adapter to display your content

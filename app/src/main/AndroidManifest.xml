@@ -26,6 +26,19 @@
         <meta-data
             android:name="DOMAIN_PACKAGE_NAME"
             android:value="org.familianascimento.rodrigo.contasdacasa.model" />
+
+        <activity
+            android:name=".view.MoradorListActivity"
+            android:label="@string/title_activity_main" >
+        </activity>
+        <activity
+            android:name=".view.MoradorNew"
+            android:label="@string/title_activity_morador_new"
+            android:parentActivityName=".view.MoradorListActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.familianascimento.rodrigo.contasdacasa.view.MoradorListActivity" />
+        </activity>
     </application>
 
 </manifest>
