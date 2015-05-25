@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Contas da Casa</string>
+    <string name="title_activity_morador_list">Moradores</string>
+    <string name="action_settings">Settings</string>
 </resources>
